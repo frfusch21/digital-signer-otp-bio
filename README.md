@@ -84,14 +84,6 @@ Metrics available in experiment outputs:
 - `GET /experiments`
 - `POST /experiments/run`
 
-
-## About artisan
-
-Laravel does **not** have an "artisan folder". It has an executable file named `artisan` in the project root.
-
-- Run commands like `php artisan serve`, `php artisan migrate`, `php artisan route:list`.
-- In this repository, I added the standard root `artisan` file plus `bootstrap/app.php` and `public/index.php` so the project layout now follows normal Laravel expectations.
-
 ## Run locally
 
 ```bash
