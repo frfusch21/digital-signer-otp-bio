@@ -73,6 +73,19 @@ Metrics available in experiment outputs:
 - Signing Completion Time
 - Verification Failure Rate
 
+## Troubleshooting: "Cannot read properties of undefined (reading 'otp')"
+
+If you see this together with `CSRF token mismatch`, the first POST (`/signing/initiate`) failed with HTTP 419, so the frontend never received `init.otp`.
+
+Why it happens:
+- Laravel web POST routes require a valid CSRF token.
+- If fetch requests do not send `X-CSRF-TOKEN`, Laravel rejects the request.
+
+What is fixed in this repo:
+- The Blade UI now includes `<meta name="csrf-token" content="{{ csrf_token() }}">`.
+- The JavaScript now sends `X-CSRF-TOKEN` and `credentials: 'same-origin'` on all POST requests.
+- Added response guards, so if a request fails, the UI shows a readable error instead of crashing at `init.otp`.
+
 ## Routes
 
 - `GET /` : beginner UI (or workflow JSON)

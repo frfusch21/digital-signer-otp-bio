@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ $title }}</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 2rem auto; max-width: 920px; line-height: 1.45; }
@@ -53,6 +54,8 @@
 <script>
 const logEl = document.getElementById('log');
 const resultEl = document.getElementById('result');
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
 const addLog = (label, obj) => {
   logEl.textContent += `${label}\n${JSON.stringify(obj, null, 2)}\n\n`;
 };
@@ -60,10 +63,29 @@ const addLog = (label, obj) => {
 async function postJson(url, payload) {
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-TOKEN': csrfToken,
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    credentials: 'same-origin',
     body: JSON.stringify(payload)
   });
-  return res.json();
+
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    data = { message: `Non-JSON response (HTTP ${res.status})` };
+  }
+
+  if (!res.ok) {
+    const msg = data?.message || `Request failed with HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+
+  return data;
 }
 
 document.getElementById('runFlow').addEventListener('click', async () => {
@@ -73,6 +95,10 @@ document.getElementById('runFlow').addEventListener('click', async () => {
   try {
     const init = await postJson('/signing/initiate', { document_id: 'DOC-DEMO-001', channel: 'email' });
     addLog('1) Initiate', init);
+
+    if (!init?.otp?.otp) {
+      throw new Error('Initiate response does not contain OTP payload.');
+    }
 
     const otpCheck = await postJson('/signing/otp/verify', {
       expected_otp: init.otp.otp,
@@ -92,6 +118,10 @@ document.getElementById('runFlow').addEventListener('click', async () => {
       signer_id: 'user-001'
     });
     addLog('4) Apply Signature', apply);
+
+    if (!apply?.signature?.document_hash) {
+      throw new Error('Apply signature response missing document hash.');
+    }
 
     const verify = await postJson('/signing/verify', {
       document_content: 'This is a research demo document.',
