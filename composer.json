@@ -1,0 +1,17 @@
+{
+  "name": "research/digital-signer-otp-bio",
+  "type": "project",
+  "description": "Laravel-based research prototype for OTP vs biometric liveness digital signing workflow.",
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "lint": "find app routes database -name '*.php' -print0 | xargs -0 -n1 php -l"
+  }
+}
