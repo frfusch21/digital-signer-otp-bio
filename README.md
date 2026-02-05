@@ -84,6 +84,29 @@ Metrics available in experiment outputs:
 - `GET /experiments`
 - `POST /experiments/run`
 
+
+## Laravel structure completeness
+
+To address missing-core-file feedback, this repository now includes commonly expected Laravel files/directories:
+
+- `bootstrap/cache/.gitignore`
+- `app/Console/Kernel.php`
+- `app/Http/Kernel.php`
+- `app/Exceptions/Handler.php`
+- `config/app.php`
+- `config/database.php`
+
+> Note: this is still a lightweight research prototype scaffold; once dependencies are installed in a normal environment, these files support standard Laravel command/runtime expectations.
+
+## About artisan
+
+Laravel does **not** have an "artisan folder". It has an executable file named `artisan` in the project root.
+
+- Run commands like `php artisan serve`, `php artisan migrate`, `php artisan route:list`.
+- In this repository, I added the standard root `artisan` file plus `bootstrap/app.php` and `public/index.php` so the project layout now follows normal Laravel expectations.
+
+Default database in `.env.example` is now **MySQL** (`DB_CONNECTION=mysql`).
+
 ## Run locally
 
 ```bash
