@@ -13,3 +13,5 @@ Route::post('/signing/verify', [SigningWorkflowController::class, 'verifySignatu
 
 Route::get('/experiments', [ExperimentController::class, 'index'])->name('experiments.index');
 Route::post('/experiments/run', [ExperimentController::class, 'run'])->name('experiments.run');
+Route::post('/experiments/attempts', [ExperimentController::class, 'storeAttempt'])->name('experiments.attempts.store');
+Route::get('/experiments/attempts', [ExperimentController::class, 'attempts'])->name('experiments.attempts.index');

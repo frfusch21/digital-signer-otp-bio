@@ -19,5 +19,7 @@ class SigningAttempt extends Model
         'threat_scenario',
         'completion_time_seconds',
         'failure_reason',
+        'actor_label',
+        'outcome_label',
     ];
 }
