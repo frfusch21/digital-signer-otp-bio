@@ -73,6 +73,19 @@ Metrics available in experiment outputs:
 - Signing Completion Time
 - Verification Failure Rate
 
+## Scenario experiment UI (for your paper tables)
+
+The home page now includes a **Run Scenario Experiments** section:
+
+- choose one or more configurations:
+  - `configuration_a_otp_only`
+  - `configuration_b_liveness_only`
+  - `configuration_c_otp_plus_liveness`
+- click **Run Experiments** to call `POST /experiments/run`
+- view metrics in a table (TAR, FAR, attack success rate, completion time, verification failure rate)
+- filter by scenario (`legitimate_user`, `photo_spoofing`, `video_replay`, `otp_channel_compromise`)
+- click **Export CSV** to download results and include them in your paper analysis
+
 ## Troubleshooting: "Cannot read properties of undefined (reading 'otp')"
 
 If you see this together with `CSRF token mismatch`, the first POST (`/signing/initiate`) failed with HTTP 419, so the frontend never received `init.otp`.
